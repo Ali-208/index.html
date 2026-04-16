@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoglikInfo — Mukammal Tibbiy Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#1a9e6a;
+  --green-light:#e8f7f1;
+  --green-dark:#0d6e4a;
+  --blue:#2563eb;
+  --blue-light:#eff6ff;
+  --orange:#f59e0b;
+  --orange-light:#fffbeb;
+  --red:#ef4444;
+  --red-light:#fef2f2;
+  --bg:#f0faf5;
+  --card:#ffffff;
+  --text:#1a2e1e;
+  --muted:#6b7280;
+  --border:#d1fae5;
+  --radius:20px;
+  --shadow:0 10px 30px rgba(26,158,106,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* NAVIGATION */
+nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.8rem 2rem;
+}
+.nav-logo{ font-size:1.6rem; font-weight:900; color:var(--green); display:flex; align-items:center; gap:10px; text-decoration:none;}
+.nav-tabs{display:flex;gap:8px}
+.nav-tab{
+  background:none; border:none; cursor:pointer; padding:0.6rem 1.2rem; border-radius:50px;
+  font-family:inherit; font-size:0.9rem; font-weight:700; color:var(--muted); transition:0.3s;
+}
+.nav-tab:hover{ background:var(--green-light); color:var(--green); }
+.nav-tab.active{ background:var(--green); color:#fff; box-shadow: 0 4px 15px rgba(26,158,106,0.3); }
+
+/* HERO SECTION */
+.hero{
+  background: linear-gradient(135deg, #e8f7f1 0%, #d1fae5 100%);
+  padding: 5rem 2rem; text-align: center; position: relative;
+}
+.hero h1{ font-family:'Lora',serif; font-size:clamp(2.5rem,6vw,3.5rem); line-height:1.1; margin-bottom:1.5rem; }
+.hero h1 span{ color:var(--green); }
+.hero p{ font-size:1.1rem; color:var(--muted); max-width:600px; margin:0 auto 2.5rem; }
+
+.hero-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1.5rem; max-width:900px; margin:0 auto; }
+.hero-card{
+  background:#fff; padding:1.5rem; border-radius:var(--radius); border:1px solid var(--border);
+  transition:0.4s; cursor:pointer; box-shadow:var(--shadow);
+}
+.hero-card:hover{ transform:translateY(-10px); border-color:var(--green); }
+.hero-card i{ font-size:2.5rem; display:block; margin-bottom:10px; }
+
+/* PAGES */
+.page{ display:none; padding:3rem 2rem; max-width:1100px; margin:0 auto; animation:slideUp 0.5s ease; }
+.page.active{ display:block; }
+@keyframes slideUp{ from{opacity:0; transform:translateY(30px)} to{opacity:1; transform:translateY(0)} }
+
+/* SEARCH BOX */
+.search-container{ max-width:600px; margin:0 auto 3rem; }
+.search-box{
+  display:flex; align-items:center; background:#fff; border:2px solid var(--border);
+  border-radius:50px; padding:0.5rem 1.5rem; box-shadow:var(--shadow); transition:0.3s;
+}
+.search-box:focus-within{ border-color:var(--green); }
+.search-box input{ flex:1; border:none; outline:none; padding:0.8rem; font-size:1.1rem; }
+
+/* MEDICINE GRID */
+.medicine-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1.5rem; }
+.med-card{
+  background:#fff; border-radius:var(--radius); border:1.5px solid var(--border);
+  padding:1.5rem; transition:0.3s; box-shadow:var(--shadow);
+}
+.med-card:hover{ border-color:var(--green); transform:scale(1.02); }
+.med-header{ display:flex; align-items:center; gap:15px; margin-bottom:1rem; }
+.med-icon{ width:50px; height:50px; background:var(--green-light); border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
+.med-tag{ font-size:0.75rem; background:var(--green-light); color:var(--green-dark); padding:4px 10px; border-radius:50px; font-weight:800; }
+.med-dose{ background:var(--bg); padding:10px; border-radius:12px; font-size:0.85rem; margin-top:10px; border-left:4px solid var(--green); }
+
+/* SYMPTOMS */
+.symptom-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:1rem; margin-bottom:2rem; }
+.symptom-item{
+  background:#fff; border:2px solid var(--border); border-radius:18px; padding:1.2rem;
+  text-align:center; cursor:pointer; transition:0.2s;
+}
+.symptom-item.selected{ background:var(--green); border-color:var(--green); color:#fff; transform:scale(0.95); }
+.symptom-item i{ font-size:2rem; display:block; margin-bottom:8px; }
+
+.check-btn{
+  background:var(--green); color:#fff; border:none; padding:1.2rem 3rem; border-radius:50px;
+  font-size:1.2rem; font-weight:800; cursor:pointer; display:block; margin:0 auto; transition:0.3s;
+}
+.check-btn:hover{ background:var(--green-dark); transform:translateY(-3px); box-shadow:0 10px 20px rgba(26,158,106,0.3); }
+
+.result-container{ margin-top:3rem; display:none; }
+.result-card{
+  background:#fff; border:2px solid var(--green); border-radius:var(--radius); padding:2rem;
+  margin-bottom:1.5rem; animation:fadeIn 0.5s;
+}
+.res-item{ display:flex; align-items:center; gap:20px; background:var(--bg); padding:1.2rem; border-radius:15px; margin-bottom:10px; }
+.res-percent{ background:var(--green); color:#fff; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; }
+
+/* BMI SECTION */
+.bmi-wrapper{ display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; }
+.bmi-input-card{ background:#fff; padding:2rem; border-radius:var(--radius); border:1px solid var(--border); flex:1; min-width:300px; box-shadow:var(--shadow); }
+.bmi-field{ margin-bottom:1.5rem; }
+.bmi-field label{ display:block; margin-bottom:8px; font-weight:700; }
+.bmi-field input{ width:100%; padding:1rem; border-radius:12px; border:2px solid var(--border); font-size:1.1rem; outline:none; }
+.bmi-field input:focus{ border-color:var(--green); }
+
+.bmi-display{
+  background:var(--green); color:#fff; padding:2.5rem; border-radius:var(--radius);
+  flex:1; min-width:300px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; transition:0.5s;
+}
+.bmi-val{ font-size:4.5rem; font-weight:900; line-height:1; }
+
+/* MODAL */
+.modal{
+  position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
+  display:none; align-items:center; justify-content:center; z-index:2000; padding:1rem;
+}
+.modal-content{ background:#fff; padding:2.5rem; border-radius:var(--radius); max-width:400px; text-align:center; animation:pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes pop { from{transform:scale(0.5)} to{transform:scale(1)} }
+.modal-btn{ background:var(--green); color:#fff; border:none; padding:0.8rem 2rem; border-radius:50px; margin-top:1.5rem; cursor:pointer; font-weight:800; }
+
+footer{ background:#fff; border-top:1px solid var(--border); padding:3rem; text-align:center; margin-top:5rem; }
+
+@media (max-width:768px){
+  nav{ padding:1rem; }
+  .nav-tabs{ position:fixed; bottom:0; left:0; width:100%; background:#fff; padding:10px; border-top:1px solid var(--border); justify-content:space-around; }
+  .page{ padding:1rem; padding-bottom:5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">🌿 Soglik<span>Info</span></a>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchPage('home')">🏠 Bosh</button>
+    <button class="nav-tab" onclick="switchPage('medicine')">💊 Dorilar</button>
+    <button class="nav-tab" onclick="switchPage('symptom')">🤒 Tahlil</button>
+    <button class="nav-tab" onclick="switchPage('health')">🥗 BMI</button>
+  </div>
+</nav>
+
+<div id="home" class="page active">
+  <div class="hero">
+    <h1>Sog'lom Hayot — <span>Har Birimiz Uchun</span></h1>
+    <p>O'zbek tilidagi eng keng qamrovli tibbiy portal. Dorilar, kasalliklar va sog'lom turmush tarzi haqida ishonchli ma'lumotlar.</p>
+    <div class="hero-grid">
+      <div class="hero-card" onclick="switchPage('medicine')"><i>💊</i><b>100+ Dorilar</b><p>Ma'lumotlar bazasi</p></div>
+      <div class="hero-card" onclick="switchPage('symptom')"><i>🔬</i><b>Aqlli Tahlil</b><p>Alomatlar bo'yicha</p></div>
+      <div class="hero-card" onclick="switchPage('health')"><i>⚖️</i><b>BMI Kalkulyator</b><p>Vazn nazorati</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="medicine" class="page">
+  <div style="text-align:center; margin-bottom:2rem;">
+    <h2>💊 Dorilar Katalogi</h2>
+    <p style="color:var(--muted)">Dori nomi, turi yoki foydasi bo'yicha qidiring</p>
+  </div>
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" id="medSearch" placeholder="Masalan: Paratsetamol, Shamollash, Vitamin..." oninput="searchMeds()">
+    </div>
+  </div>
+  <div class="medicine-grid" id="medList"></div>
+</div>
+
+<div id="symptom" class="page">
+  <div style="text-align:center; margin-bottom:3rem;">
+    <h2>🤒 Alomatlar Bo'yicha Tahlil</h2>
+    <p style="color:var(--muted)">O'zingizda his qilayotgan belgilarni tanlang</p>
+  </div>
+  <div class="symptom-grid" id="sympGrid"></div>
+  <button class="check-btn" onclick="analyzeSymptoms()">🔍 Tahlilni Boshlash</button>
+
+  <div id="analysisResult" class="result-container">
+    <div class="result-card">
+      <h3 style="margin-bottom:20px">📋 Ehtimoliy Natijalar</h3>
+      <div id="resultOutput"></div>
+      <div style="background:var(--red-light); color:var(--red); padding:1rem; border-radius:12px; margin-top:20px; font-size:0.85rem; font-weight:700;">
+        ⚠️ DIQQAT: Ushbu natijalar faqat ma'lumot uchun! Aniq tashxisni faqat shifokor qo'ya oladi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="health" class="page">
+  <div style="text-align:center; margin-bottom:3rem;">
+    <h2>⚖️ BMI (Tana Vazni Indeksi)</h2>
+    <p style="color:var(--muted)">Vazningiz bo'yingizga nisbatan qanday ekanligini biling</p>
+  </div>
+  <div class="bmi-wrapper">
+    <div class="bmi-input-card">
+      <div class="bmi-field">
+        <label>Bo'yingiz (sm)</label>
+        <input type="number" id="height" placeholder="175" oninput="calculateBMI()">
+      </div>
+      <div class="bmi-field">
+        <label>Vazningiz (kg)</label>
+        <input type="number" id="weight" placeholder="70" oninput="calculateBMI()">
+      </div>
+      <p style="font-size:0.85rem; color:var(--muted)">Ma'lumotlarni o'zgartirishingiz bilan natija yangilanadi.</p>
+    </div>
+    <div id="bmiDisplay" class="bmi-display">
+      <div id="bmiResultVal" class="bmi-val">0</div>
+      <h3 id="bmiStatus" style="margin:10px 0">Ma'lumot yo'q</h3>
+      <p id="bmiText">Kalkulyatorga ma'lumot kiriting.</p>
+    </div>
+  </div>
+</div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div style="font-size:3rem; margin-bottom:1rem">⚠️</div>
+    <h3>Xatolik!</h3>
+    <p id="modalMsg" style="margin-top:10px; color:var(--muted)"></p>
+    <button class="modal-btn" onclick="closeModal()">Tushunarli</button>
+  </div>
+</div>
+
+<footer>
+  <h3>🌿 SoglikInfo</h3>
+  <p style="color:var(--muted); margin:10px 0">Sog'ligingiz — sizning eng katta boyligingiz.</p>
+  <p style="font-size:0.8rem; color:#aaa">© 2026 Barcha huquqlar himoyalangan.</p>
+</footer>
+
+<script>
+// DATA: MEDICINES
+const medsData = [
+  {name:'Paratsetamol', cat:'Isitma tushiruvchi', icon:'🔴', desc:'Bosh og\'rig\'i, isitma va tish og\'rig\'ida ishlatiladi.', dose:'Kattalar: 500mg - 1g gacha, kuniga 3-4 marta.'},
+  {name:'Ibuprofen', cat:'Og\'riq qoldiruvchi', icon:'🟠', desc:'Yallig\'lanishga qarshi ta\'sirga ega. Bo\'g\'im og\'riqlarida samarali.', dose:'400mg ovqatdan keyin, kuniga 2-3 marta.'},
+  {name:'Amoksitsillin', cat:'Antibiotik', icon:'🔵', desc:'Bakterial infeksiyalarni (tomoq, o\'pka) davolashda qo\'llaniladi.', dose:'Faqat shifokor nazorati ostida 500mg - 1g.'},
+  {name:'Loratadin', cat:'Allergiya', icon:'🟢', desc:'Mavsumiy allergiya, burun oqishi va qichishishni bartaraf etadi.', dose:'10mg (1 tabletka) kuniga bir marta.'},
+  {name:'No-shpa', cat:'Spazmolitik', icon:'🟡', desc:'Qorin va mushaklardagi spazm (tortishish) og\'riqlarini qoldiradi.', dose:'40-80mg kuniga 2-3 marta.'},
+  {name:'Omeprazol', cat:'Oshqozon', icon:'🟤', desc:'Oshqozon kislotasini kamaytiradi. Gastritda qo\'llaniladi.', dose:'20mg ovqatdan oldin, kuniga 1 marta.'},
+  {name:'Validol', cat:'Yurak / Tinchlantiruvchi', icon:'⚪', desc:'Yurak sohasidagi engil og\'riqlar va stressda qo\'llaniladi.', dose:'Til ostiga 1 tabletka.'},
+  {name:'Mezim', cat:'Hovm qilish', icon:'💗', desc:'Ovqat hazm qilishni yaxshilaydi, og\'irlik hissini yo\'qotadi.', dose:'Ovqat vaqtida 1-2 tabletka.'},
+  {name:'S-Vitamini', cat:'Immunitet', icon:'🍋', desc:'Organizmning himoya qobiliyatini oshiradi, shamollashni oldini oladi.', dose:'500mg-1000mg kuniga bir marta.'}
+];
+
+// DATA: SYMPTOMS
+const symptomsData = [
+  {icon:'🤒', name:'Isitma'}, {icon:'😮‍💨', name:'Yo\'tal'}, {icon:'🤧', name:'Burun oqishi'},
+  {icon:'🤕', name:'Bosh og\'rig\'i'}, {icon:'🤢', name:'Ko\'ngil aynishi'}, {icon:'🤮', name:'Qayt qilish'},
+  {icon:'😩', name:'Qorin og\'rig\'i'}, {icon:'💩', name:'Ich ketishi'}, {icon:'😴', name:'Charchoq'},
+  {icon:'👄', name:'Tomoq og\'rig\'i'}, {icon:'🥶', name:'Titroq'}, {icon:'😵', name:'Bosh aylanishi'}
+];
+
+// DATA: DISEASES
+const diseasesData = [
+  {name:'Shamollash (ARVI)', syms:['Burun oqishi','Yo\'tal','Tomoq og\'rig\'i','Isitma'], info:'Oddiy virusli infeksiya. Dam oling va ko\'p suyuqlik iching.'},
+  {name:'Gripp', syms:['Isitma','Bosh og\'rig\'i','Charchoq','Titroq','Yo\'tal'], info:'Yuqori isitma bilan kechadi. Shifokor ko\'rigi zarur.'},
+  {name:'Ovqatdan zaharlanish', syms:['Qorin og\'rig\'i','Ko\'ngil aynishi','Qayt qilish','Ich ketishi'], info:'Sifatsiz ovqat natijasi. Suyuqlik o\'rnini to\'ldirish (Regidron) shart.'},
+  {name:'Angina', syms:['Tomoq og\'rig\'i','Isitma','Charchoq'], info:'Tomoqdagi kuchli og\'riq. Antibiotik talab etilishi mumkin.'},
+  {name:'Gastrit / Oshqozon muammosi', syms:['Qorin og\'rig\'i','Ko\'ngil aynishi','Bosh aylanishi'], info:'Ratsionga e\'tibor bering, achchiq va qovurilgan ovqatlardan tiyiling.'}
+];
+
+// PAGE SWITCHER
+function switchPage(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// RENDER MEDICINES
+function renderMeds(list){
+  const container = document.getElementById('medList');
+  container.innerHTML = list.map(m => `
+    <div class="med-card">
+      <div class="med-header">
+        <div class="med-icon">${m.icon}</div>
+        <div>
+          <h3 style="font-size:1.1rem">${m.name}</h3>
+          <span class="med-tag">${m.cat}</span>
+        </div>
+      </div>
+      <p style="font-size:0.9rem; color:var(--muted); height:45px; overflow:hidden">${m.desc}</p>
+      <div class="med-dose"><b>Tavsiya:</b> ${m.dose}</div>
+    </div>
+  `).join('');
+}
+renderMeds(medsData);
+
+function searchMeds(){
+  const q = document.getElementById('medSearch').value.toLowerCase();
+  const filtered = medsData.filter(m => m.name.toLowerCase().includes(q) || m.cat.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q));
+  renderMeds(filtered);
+}
+
+// SYMPTOM LOGIC
+const selectedSyms = new Set();
+document.getElementById('sympGrid').innerHTML = symptomsData.map(s => `
+  <div class="symptom-item" onclick="toggleSym(this, '${s.name}')">
+    <i>${s.icon}</i>
+    <b>${s.name}</b>
+  </div>
+`).join('');
+
+function toggleSym(el, name){
+  el.classList.toggle('selected');
+  selectedSyms.has(name) ? selectedSyms.delete(name) : selectedSyms.add(name);
+}
+
+function analyzeSymptoms(){
+  const sel = Array.from(selectedSyms);
+  if(sel.length < 2) {
+    showModal('Iltimos, aniqroq tahlil uchun kamida 2 ta alomatni tanlang.');
+    return;
+  }
+
+  const results = diseasesData.map(d => {
+    const match = d.syms.filter(s => sel.includes(s)).length;
+    const score = Math.round((match / d.syms.length) * 100);
+    return { ...d, score };
+  }).filter(r => r.score > 10).sort((a,b) => b.score - a.score);
+
+  const output = document.getElementById('resultOutput');
+  output.innerHTML = results.length > 0 ? results.map(r => `
+    <div class="res-item">
+      <div class="res-percent">${r.score}%</div>
+      <div>
+        <h4 style="font-size:1.1rem">${r.name}</h4>
+        <p style="font-size:0.85rem; color:var(--muted)">${r.info}</p>
+      </div>
+    </div>
+  `).join('') : "<p>Afsuski, kiritilgan alomatlar bo'yicha ma'lumot topilmadi.</p>";
+
+  document.getElementById('analysisResult').style.display = 'block';
+  document.getElementById('analysisResult').scrollIntoView({behavior:'smooth'});
+}
+
+// BMI CALCULATOR
+function calculateBMI(){
+  const h = document.getElementById('height').value / 100;
+  const w = document.getElementById('weight').value;
+  const display = document.getElementById('bmiDisplay');
+  
+  if(h > 0 && w > 0){
+    const bmi = (w / (h * h)).toFixed(1);
+    let status = "", color = "", text = "";
+
+    if(bmi < 18.5){ status = "Vazn yetishmovchiligi"; color = "#3b82f6"; text = "Sizda vazn me'yordan past. Ovqatlanishga e'tibor bering."; }
+    else if(bmi < 25){ status = "Ideal vazn ✅"; color = "#1a9e6a"; advice = "Sizning vazningiz juda yaxshi. Shunday davom eting!"; }
+    else if(bmi < 30){ status = "Ortiqcha vazn"; color = "#f59e0b"; advice = "Sizda biroz ortiqcha vazn bor. Jismoniy faollikni oshiring."; }
+    else { status = "Semizlik"; color = "#ef4444"; advice = "Sog'ligingizga e'tiborli bo'ling. Shifokor bilan maslahatlashing."; }
+
+    document.getElementById('bmiResultVal').innerText = bmi;
+    document.getElementById('bmiStatus').innerText = status;
+    display.style.background = color;
+    document.getElementById('bmiText').innerText = advice;
+  }
+}
+
+// MODAL LOGIC
+function showModal(msg){
+  document.getElementById('modalMsg').innerText = msg;
+  document.getElementById('myModal').style.display = 'flex';
+}
+function closeModal(){ document.getElementById('myModal').style.display = 'none'; }
+</script>
+</body>
+</html>
